@@ -1,0 +1,93 @@
+::ng-deep .mat-form-field-flex > .mat-form-field-infix 
+{ padding: 0.5em 0px !important;
+  font-size: 14px;
+}
+
+::ng-deep .mat-form-field-outline-end {
+    border-radius: 0 7px 7px 0 !important;
+  }
+
+  ::ng-deep .mat-form-field-outline-start {
+    border-radius: 7px 0 0 9px !important;
+     min-width: 7px !important;
+  }
+
+  .marginAndWidth {
+
+    margin-left: -5px;
+    width:230px;
+
+  }
+  .cardbody{
+    margin-left: 50px;
+    width: 1253px;
+  }
+
+  // table{
+  //    width: 100%;
+   
+  //  }
+  .numericFeild{
+    width: 100px;
+  }
+
+//   td.mat-footer-cell {
+//     padding: 2px !important;
+//     border-bottom-width: 1px;
+//     border-bottom-style: solid;
+// }
+
+::ng-deep.th.mat-header-cell, td.mat-cell, td.mat-footer-cell{
+  padding: 2px;
+}
+// Footer Setting
+.footer{
+  margin-left: 51px;
+ // width:115px;//whnd Dis % hide
+ width:139px;
+  text-align: center;
+}
+
+
+.ScrollStyle {
+  height: 250px;
+  max-width: 100%;
+  overflow: auto;
+}
+//Table Header
+.mat-header-cell {
+  background: rgb(131, 168, 250);
+  color: white;
+}
+.tableDel{
+  color:red;
+}
+
+
+
+.mat-button-toggle {
+  white-space: nowrap;
+  position: relative;
+  width: 95px;
+}
+.btnlabel{
+  margin-top: 6px;
+}
+.unpost{
+  color: red;
+}
+.post{
+  color: green;
+}
+.btngen{
+  color: rgb(131, 168, 250);
+}
+.btndisable{
+  color:rgb(212, 209, 209)
+}
+
+
+
+
+
+

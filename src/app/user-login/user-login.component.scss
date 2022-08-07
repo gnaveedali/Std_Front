@@ -1,0 +1,37 @@
+.feildMargin{
+    // font-size: 36px;
+    margin-top: 134px;
+    margin-left: 87px;
+}
+
+::ng-deep .mat-form-field-outline-start {
+    border-radius: 9px 0 0 9px !important;
+     min-width: 9px !important;
+  }
+
+  ::ng-deep .mat-form-field-outline-end {
+    border-radius: 0 9px 9px 0 !important;
+  }
+::ng-deep .mat-form-field-flex > .mat-form-field-infix { padding: 0.5em 0px !important;}
+::ng-deep .mat-checkbox-ripple .mat-ripple-element {
+    background-color: black !important;
+  }
+
+.example-section {
+    margin: 12px 0;
+    color: blue;
+   
+  }
+  
+  .example-margin {
+    margin: 0 12px;
+  }
+  
+  input.ng-invalid.ng-touched {
+    border: 2px solid red;
+    /* green */
+  }
+  
+  .invalid-feedback {
+    color: red;
+  }

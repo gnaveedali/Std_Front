@@ -1,0 +1,97 @@
+
+<div id="mySidenav" class="sidenav">
+    <mat-label class="headTile">RMS System</mat-label>
+    <div class="pt-4">
+
+        <a (click)="Home()"><mat-icon matSuffix class="titleIcon">home</mat-icon><i class="title"> Home </i></a>
+  
+    <mat-expansion-panel class="Expension " (opened)="panelOpenState = true" 
+    (closed)="panelOpenState = false" > 
+    <mat-expansion-panel-header class="Expension">
+      <mat-panel-title class="Expension ">
+        <mat-icon matSuffix>library_books</mat-icon>
+        <p class="expHead">GL Accounts</p>
+      </mat-panel-title>
+     </mat-expansion-panel-header>
+    <a class="subTile" href="#">Chart Of Account</a>
+    <a class="subTile" href="#">Item Category</a>
+    <a class="subTile" href="#">Vouchers</a>
+  </mat-expansion-panel>
+  
+  <a href="#"><mat-icon matSuffix class="titleIcon">supervisor_account</mat-icon><i class="title"> Customer </i></a>
+ <mat-expansion-panel class="Expension" (opened)="panelOpenState = true" 
+  (closed)="panelOpenState = false"> 
+  
+  <mat-expansion-panel-header class="Expension">
+    <mat-panel-title class="Expension">
+      <mat-icon matSuffix>add_shopping_cart</mat-icon>
+      <p class="expHead">Sales</p>
+     </mat-panel-title>
+   </mat-expansion-panel-header>
+  <a class="subTile" href="#">Sale Order</a>
+  <a class="subTile" (click)="SaleInvoice()">Sale Invoice</a>
+  <a class="subTile" href="#">Sale Return</a>
+  </mat-expansion-panel>
+  
+  <a href="#"><mat-icon matSuffix class="titleIcon">supervised_user_circle</mat-icon><i class="title"> Supplier </i></a>
+  
+  <mat-expansion-panel class="Expension" (opened)="panelOpenState = true" 
+  (closed)="panelOpenState = false"> 
+  <mat-expansion-panel-header class="Expension">
+    <mat-panel-title class="Expension">
+      <mat-icon matSuffix>shopping_cart</mat-icon>
+      <p class="expHead">Purchase</p>
+    </mat-panel-title>
+   </mat-expansion-panel-header>
+  <a class="subTile" href="#">Purchase Order</a>
+  <a class="subTile" href="#">Purchase Invoice</a>
+  <a class="subTile" href="#">Purchase Return</a>
+  </mat-expansion-panel>
+  
+  <a href="#"><mat-icon matSuffix class="titleIcon">shopping_basket</mat-icon><i class="title"> Item </i></a>
+  
+    <mat-expansion-panel class="Expension" (opened)="panelOpenState = true" 
+  (closed)="panelOpenState = false"> 
+  <mat-expansion-panel-header class="Expension">
+    <mat-panel-title class="Expension">
+      <mat-icon matSuffix>build</mat-icon>
+      
+      <p class="expHead"> Administration</p>
+    </mat-panel-title>
+   </mat-expansion-panel-header>
+  <a class="subTile" href="#">Deffination</a>
+  </mat-expansion-panel>
+  
+  <a href="#"><mat-icon matSuffix class="titleIcon">local_printshop</mat-icon> <i class="title"> Reports </i></a>
+  
+  <mat-expansion-panel class="Expension" (opened)="panelOpenState = true" 
+  (closed)="panelOpenState = false"> 
+  <mat-expansion-panel-header class="Expension">
+    <mat-panel-title class="Expension">
+      <mat-icon matSuffix>group</mat-icon>
+     <p class="expHead"> User Profile</p>
+    </mat-panel-title>
+   </mat-expansion-panel-header>
+  <a class="subTile" href="#">User Regesteration</a>
+  <a class="subTile" href="#">User View</a>
+  </mat-expansion-panel>
+  </div>
+  </div>
+  
+  <!-- <div id="main">
+    <span style="font-size:30px;cursor:pointer" (click)="openNav()">&#9776; </span>
+   
+ </div> -->
+
+  <div class="row; navBar " id="main" style="padding: 0px;">
+    <div  class="col-md-12" >
+      <span style="font-size:30px;cursor:pointer;color: white;" (click)="openNav()">&#9776; </span>
+       <mat-label style="margin-left: 576px;font-size: 28px;color: white;font-style: italic;">Standard Trading </mat-label>
+      </div>
+</div>
+  
+  
+  
+  
+  
+  

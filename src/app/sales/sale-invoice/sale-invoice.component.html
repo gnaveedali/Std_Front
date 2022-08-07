@@ -1,0 +1,434 @@
+<app-sidebar></app-sidebar>
+<section class="home-content">
+  <div class="container pt-4">
+    <h6 class="main-title " style="margin-left:-72px;">Sale Invoice</h6>
+  </div>
+  <div *ngFor="let element of masterData | paginate : {
+    itemsPerPage: tableSize,
+    currentPage: page,
+    totalItems: count
+  };">
+  <div class="row pt-2">
+    <div class="col-6">
+      <mat-button-toggle-group name="fontStyle" name="fontStyle" id="fontStyle" style="margin-left: 50px;">
+        <div *ngIf="btnNew == true then disableNew else enableNew"></div>
+        <ng-template #disableNew>
+            <mat-button-toggle value="bold" [disabled]="false" (click)="BlankMaster()">
+              <mat-icon class="btngen">add_circle_outline</mat-icon><label class="btnlabel">New</label>
+            </mat-button-toggle>
+        </ng-template>
+        <ng-template #enableNew>
+            <mat-button-toggle value="bold" [disabled]="true" (click)="BlankMaster()">
+              <mat-icon class="btndisable">add_circle_outline</mat-icon><label class="btnlabel">New</label>
+            </mat-button-toggle>
+        </ng-template>
+        <div *ngIf="btnFind == true then disableFind else enableFind"></div>
+        <ng-template #disableFind>
+            <mat-button-toggle value="bold" [disabled]="false" (click)="FindMaster()"> 
+              <mat-icon class="btngen">find_in_page</mat-icon><label class="btnlabel">Find</label>
+            </mat-button-toggle>
+        </ng-template>
+        <ng-template #enableFind>
+            <mat-button-toggle value="bold" [disabled]="true" (click)="FindMaster()"> 
+              <mat-icon class="btndisable">find_in_page</mat-icon><label class="btnlabel">Find</label>
+            </mat-button-toggle>
+        </ng-template>
+
+        <div *ngIf="btnFind == true then disableunPost else enableUnPost"></div>
+        <ng-template #disableunPost>
+            <mat-button-toggle value="bold" [disabled]="false" (click)="FindMaster()">
+               <mat-icon class="unpost">file_upload</mat-icon><label class="btnlabel">UnPost</label>
+            </mat-button-toggle>
+        </ng-template>
+        <ng-template #enableUnPost>
+            <mat-button-toggle value="bold" [disabled]="true" (click)="FindMaster()">
+               <mat-icon class="btndisable">file_upload</mat-icon><label class="btnlabel">UnPost</label>
+            </mat-button-toggle>
+        </ng-template>
+
+        <div *ngIf="btnFind == true then disablePost else enablePost"></div>
+        <ng-template #disablePost>
+            <mat-button-toggle value="bold" [disabled]="false" (click)="FindMaster()">
+              <mat-icon class="post">file_download</mat-icon><label class="btnlabel">Post</label>
+            </mat-button-toggle>
+        </ng-template>
+        <ng-template #enablePost>
+            <mat-button-toggle value="bold" [disabled]="true" (click)="FindMaster()">
+              <mat-icon class="btndisable">file_download</mat-icon><label class="btnlabel">Post</label>
+            </mat-button-toggle>
+        </ng-template>
+
+        
+        <div *ngIf="btnEdit == true then disableEdit else enableEdit"></div>
+        <ng-template #disableEdit>
+            <mat-button-toggle value="bold" [disabled]="false" (click)="EditMaster()">
+              <mat-icon class="btngen">edit_note</mat-icon><label class="btnlabel">Edit</label>
+            </mat-button-toggle>
+        </ng-template>
+        <ng-template #enableEdit>
+            <mat-button-toggle value="bold" [disabled]="true" (click)="EditMaster()">
+              <mat-icon class="btndisable">edit_note</mat-icon><label class="btnlabel">Edit</label>
+            </mat-button-toggle>
+        </ng-template>
+        <div *ngIf="btnSave == true then disableSave else enableSave"></div>
+        <ng-template #disableSave>
+            <mat-button-toggle value="bold" [disabled]="false" (click)="SaveMaster()">
+              <mat-icon class="btngen">save</mat-icon><label class="btnlabel">Save</label>
+            </mat-button-toggle>
+        </ng-template>
+        <ng-template #enableSave>
+            <mat-button-toggle value="bold" [disabled]="true" (click)="SaveMaster()">
+              <mat-icon class="btndisable">save</mat-icon><label class="btnlabel">Save</label>
+            </mat-button-toggle>
+        </ng-template>
+        <div *ngIf="btnDelete == true then disableDelete else enableDelete"></div>
+        <ng-template #disableDelete>
+            <mat-button-toggle value="bold" [disabled]="false" (click)="DeleteMaster()">
+              <mat-icon class="tableDel">delete_forever</mat-icon><label class="btnlabel">Delete</label>
+            </mat-button-toggle>
+        </ng-template>
+        <ng-template #enableDelete>
+            <mat-button-toggle value="bold" [disabled]="true" (click)="DeleteMaster()">
+              <mat-icon class="btndisable">delete_forever</mat-icon><label class="btnlabel">Delete</label>
+            </mat-button-toggle>
+        </ng-template>
+        <div *ngIf="btnCancel == true then disableCancel else enableCancel"></div>
+        <ng-template #disableCancel>
+            <mat-button-toggle value="bold" [disabled]="false" (click)="LoadMaster()">
+              <mat-icon class="btngen" disabled="false">cancel</mat-icon><label class="btnlabel">Cancel</label>
+            </mat-button-toggle>
+        </ng-template>
+        <ng-template #enableCancel>
+            <mat-button-toggle value="bold" [disabled]="true" (click)="LoadMaster()">
+              <mat-icon class="btndisable">cancel</mat-icon><label class="btnlabel">Cancel</label>
+            </mat-button-toggle>
+        </ng-template>
+    </mat-button-toggle-group>
+    </div>
+    <div class="col-6">
+      <div class="d-flex justify-content-center">
+          <pagination-controls [responsive]="true" previousLabel="Prev" nextLabel="Next"
+              (pageChange)="onTableDataChange($event)"style="argin-top: 12px;">
+          </pagination-controls>
+      </div>
+  </div>
+  </div>
+</div>
+  <form class="form-horizontal" [formGroup]="SeleInvoiceForm">
+    <div class="form-group">
+      <div class="row pt-4">
+        <mat-form-field appearance="outline" class="field-fill inputs" style="margin-left: 50px;width:150px">
+          <mat-label>Invoice No</mat-label>
+          <input matInput placeholder="Invoice No" formControlName="InvoiceNo"
+          [readonly]="ReadOnly">
+        </mat-form-field>
+
+        <mat-form-field color="accent" appearance="outline" class="field-fill inputs" class="marginAndWidth">
+          <mat-label>Invoice Date</mat-label>
+          <input matInput [matDatepicker]="picker" [disabled]="Locked" formControlName="InvoiceDate">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker color="primary"></mat-datepicker>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" class="field-fill inputs" class="marginAndWidth">
+          <mat-label>Ware House</mat-label>
+          <mat-select [disabled]="Locked" formControlName="WareHouse">
+            <mat-option *ngFor="let data of WareHouseData" [value]="data.dataValueId">
+              {{data.dataValueName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field-fill inputs" class="marginAndWidth">
+          <mat-label>Sale Man</mat-label>
+          <mat-select [disabled]="Locked" formControlName="Saleman">
+            <mat-option *ngFor="let data of SalesManData" [value]="data.dataValueId">
+              {{data.dataValueName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field-fill inputs" class="marginAndWidth">
+          <mat-label>Refrence No</mat-label>
+          <input matInput placeholder="Refrence No" [readonly]="Locked" formControlName="RefrenceNo">
+        </mat-form-field>
+      </div>
+
+      <div class="row">
+        <mat-form-field appearance="outline" class="field-fill inputs" style="margin-left: 50px;width:150px">
+          <mat-label>Customer ID</mat-label>
+          <input matInput placeholder="Customer ID" [readonly]="Locked" formControlName="CustomerId">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field-fill inputs" style="margin-left: -5px;width:455px">
+          <mat-label>Customer Name</mat-label>
+          <input matInput placeholder="Customer Name"[readonly]="Locked" formControlName="CustomerName">
+        </mat-form-field>
+       
+        <mat-form-field appearance="outline" class="field-fill inputs" style="margin-left: -5px;width:455px">
+          <mat-label>Customer Address</mat-label>
+          <input matInput placeholder="Customer Address" [readonly]="Locked" formControlName="CustomerAddress">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field-fill inputs" class="marginAndWidth">
+          <mat-label>National Tax Number</mat-label>
+          <input matInput placeholder="NTN No" [readonly]="Locked" formControlName="NTNNo">
+        </mat-form-field>
+      </div>
+
+      <div class="row">
+        <mat-form-field appearance="outline" class="field-fill inputs" style="margin-left: 50px;width:150px">
+          <mat-label>Contact No</mat-label>
+          <input matInput placeholder="Contact No" [readonly]="Locked" formControlName="ContactNo">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field-fill inputs" style="margin-left: -5px;width:455px">
+          <mat-label>Email Address </mat-label>
+          <input matInput placeholder="Email Address" [readonly]="Locked" formControlName="EmailAddress">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field-fill inputs" style="margin-left: -5px;width:455px">
+          <mat-label>Remarks </mat-label>
+          <input matInput placeholder="Remarks" [readonly]="Locked" formControlName="Remarks">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field-fill inputs" class="marginAndWidth">
+          <mat-label>Sales Tax Number </mat-label>
+          <input matInput placeholder="STN No" [readonly]="Locked" formControlName="STNNo">
+        </mat-form-field>
+       
+        
+      </div>
+
+      <!-- Detail Section -->
+      <div class="row pt-1">
+        <div class="col-12">
+          <div class="p-1 border rounded ; cardbody">
+            <div class="ScrollStyle">
+
+              <table mat-table [dataSource]="GRDData" formArrayName="GRD">
+
+                <tr mat-header-row *matHeaderRowDef="displayColumns" ></tr>
+                <tr mat-row *matRowDef="let row; let i = index; columns: displayColumns;"></tr>
+
+
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef style="width: 67px;"> S/No </th>
+                  <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="getActualIndex(index)" style="width: 67px;">
+                    {{index+1}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ItemCode">
+                  <th mat-header-cell *matHeaderCellDef style="width: 100px;"> Item Code </th>
+                  <td mat-cell *matCellDef="let row ; let index = index" [formGroupName]="getActualIndex(index)">
+
+                    <input class="mat-form-fieldTh" type="text" formControlName="ItemCode" placeholder=""
+                      (change)=" addRow(index)" [readonly]="ReadOnly" style="width: 100px;">
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef style="width: 323px;"> Description </th>
+                  <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="getActualIndex(index)">
+                    <input type="text" formControlName="Description" placeholder="Description" [readonly]="ReadOnly"style="width: 323px;">
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Stock">
+                  <th mat-header-cell *matHeaderCellDef class="numericFeild"> Stock </th>
+                  <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="getActualIndex(index)">
+                    <input class="mat-form-fieldTh" type="number" formControlName="Stock" placeholder="Stock"
+                      [readonly]="true" class="numericFeild">
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Qty">
+                  <th mat-header-cell *matHeaderCellDef class="numericFeild"> Qty </th>
+                  <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="getActualIndex(index)">
+                    <input class="mat-form-fieldTh" type="number" formControlName="Qty" placeholder="Qty"
+                      [readonly]="ReadOnly" class="numericFeild">
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Rate">
+                  <th mat-header-cell *matHeaderCellDef class="numericFeild"> Rate </th>
+                  <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="getActualIndex(index)">
+                    <input class="mat-form-fieldTh" type="number" formControlName="Rate" placeholder="Rate"
+                      [readonly]="ReadOnly" class="numericFeild" (keydown.Tab)="Rate(index)">
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="IssueRate">
+                  <th mat-header-cell *matHeaderCellDef  class="numericFeild" [hidden]="true"> Issue Rate</th>
+                  <td mat-cell *matCellDef="let row; let index = index" [hidden]="true" [formGroupName]="getActualIndex(index)">
+                    <input class="mat-form-fieldTh" class="mat-form-fieldTh" type="number" formControlName="IssueRate"
+                      placeholder="IssueRate" [readonly]="true" class="numericFeild">
+                  </td>
+                </ng-container>
+
+               
+
+                <ng-container matColumnDef="RateEnt">
+                  <th mat-header-cell *matHeaderCellDef  class="numericFeild" [hidden]="true"> Rate Ent </th>
+                  <td mat-cell *matCellDef="let row; let index = index" [hidden]="true" [formGroupName]="getActualIndex(index)">
+                    <input class="mat-form-fieldTh" class="mat-form-fieldTh" type="number" formControlName="RateEnt"
+                      placeholder="RateEnt" [readonly]="true" class="numericFeild">
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="CostOfSales">
+                  <th mat-header-cell *matHeaderCellDef  class="numericFeild" [hidden]="true"> Cost Of Sales </th>
+                  <td mat-cell *matCellDef="let row; let index = index" [hidden]="true" [formGroupName]="getActualIndex(index)">
+                    <input class="mat-form-fieldTh" class="mat-form-fieldTh" type="number" formControlName="CostOfSales"
+                      placeholder="CostOfSales" [readonly]="true" class="numericFeild">
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="DiscountPercentage">
+                  <th mat-header-cell *matHeaderCellDef class="numericFeild"> Dis % </th>
+                  <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="getActualIndex(index)">
+                    <input class="mat-form-fieldTh" type="number" formControlName="DiscountPercentage"
+                      placeholder="DiscountPercentage" [readonly]="ReadOnly" class="numericFeild" (keydown.Tab)="DiscountPercent(index)">
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="DiscountAmount">
+                  <th mat-header-cell *matHeaderCellDef class="numericFeild"> Dis Amt </th>
+                  <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="getActualIndex(index)">
+                    <input class="mat-form-fieldTh" type="number" formControlName="DiscountAmount"
+                      placeholder="DiscountAmount" [readonly]="ReadOnly" class="numericFeild" (keydown.Tab)="DiscountAmount(index)">
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Value">
+                  <th mat-header-cell *matHeaderCellDef class="numericFeild"> Value </th>
+                  <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="getActualIndex(index)">
+                    <input class="mat-form-fieldTh" type="number" formControlName="Value" placeholder="Value"
+                      [readonly]="true" class="numericFeild">
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="NetValue">
+                  <th mat-header-cell *matHeaderCellDef  class="numericFeild" [hidden]="true"> Net Value </th>
+                  <td mat-cell *matCellDef="let row; let index = index" [hidden]="true" [formGroupName]="getActualIndex(index)">
+                    <input class="mat-form-fieldTh" class="mat-form-fieldTh" type="number" formControlName="NetValue"
+                      placeholder="NetValue" [readonly]="true" class="numericFeild">
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Remove">
+                  <th mat-header-cell *matHeaderCellDef class="numericFeild" Style="text-align: center;"> Remove </th>
+                  <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="getActualIndex(index)" >
+                    <button mat-button (click)="removeRow(index)" [disabled]="Locked" class="numericFeild tableDel"><mat-icon>delete</mat-icon></button>
+                  </td>
+                </ng-container>
+
+              </table>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row pt-1">
+        <mat-form-field appearance="standard" class="field-fill inputs footer" >
+          <mat-label>Total Quantity</mat-label>
+          <input matInput placeholder="Total Quantity" [readonly]="true" formControlName="TotalQuantity">
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="field-fill inputs footer">
+          <mat-label>Total Value</mat-label>
+          <input matInput placeholder="Total Value" [readonly]="true" formControlName="TotalValue">
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" class="field-fill inputs footer">
+          <mat-label>Freight Amount</mat-label>
+          <input matInput placeholder="Freight Amount" [readonly]="true" formControlName="FreightAmount">
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" hidden="true" class="field-fill inputs footer">
+          <mat-label>Discount %</mat-label>
+          <input matInput placeholder="Discount Percent" [readonly]="true" formControlName="DiscountPercentage">
+        </mat-form-field>
+
+        <mat-form-field appearance="standard"  class="field-fill inputs footer">
+          <mat-label>Discount Amount</mat-label>
+          <input matInput placeholder="Discount Amount" [readonly]="true" formControlName="DiscountAmount">
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" class="field-fill inputs footer">
+          <mat-label>Sales Tax %</mat-label>
+          <input matInput placeholder="Sales Tax %" [ngModel]="DefaultSaleTaxPercentage" [readonly]="Locked" formControlName="SaleTaxPercentage">
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" class="field-fill inputs footer">
+          <mat-label>Sales Tax Amount</mat-label>
+          <input matInput placeholder="Sales Tax Amount" [readonly]="true" formControlName="SalesTaxAmount">
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" class="field-fill inputs footer">
+          <mat-label>Invoice Amount</mat-label>
+          <input matInput placeholder="Invoice Amount" [readonly]="Locked" formControlName="InvoiceAmount">
+        </mat-form-field>
+      
+        </div>
+    </div>
+  </form> 
+
+  <ng-template #openPeriodSelectionModal>
+    <div mat-dialog-title>
+      <h5>Period Selection</h5>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field color="accent" style="height: 60px !Important;" appearance="outline" class="field-fill inputs" class="marginAndWidth">
+            <mat-label>Invoice Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="InvoiceDate" >
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker color="primary"></mat-datepicker>
+          </mat-form-field>
+        </div>
+     
+    </div>
+      <div class="row pt-2">
+        <div class="col-md-6">
+          <mat-form-field appearance="outline"  class="field-fill inputs" class="marginAndWidth">
+            <mat-label>Invoice Type</mat-label>
+            <mat-select formControlName="Saleman"  style="height: 25px !Important;">
+              <mat-option *ngFor="let data of SalesManData" [value]="data.dataValueId">
+                {{data.dataValueName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      
+    </div>
+    <div class="row pt-2">
+      <div class="col-md-6">
+        <button mat-raised-button color="warn" (click)="Close()">Cancel</button>
+      </div>
+    
+      <div class="col-md-2">
+      <button mat-raised-button color="primary">Ok</button>
+    </div>
+  </div>
+    
+  </div>
+  </ng-template>
+</section>
+
+
+<!-- <form [formGroup]="employeeForm">
+
+    <div class="form-group">
+        <input id="fullName" type="text" class="form-control" formControlName="fullName">
+        <div formArrayName="skills">
+           
+          <div formGroupName="0">
+             Skill Name Label & Form Control HTML
+              Experience Label & Form Control HTML
+              Proficiency Label & Form Control HTML 
+          </div>
+        </div>
+      </div>
+
+</form> -->

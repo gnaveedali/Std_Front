@@ -1,0 +1,84 @@
+.cartSales{
+    margin-left: 40px;
+    width: 380px;
+    height: 300px;
+}
+
+.cartPurchase{
+    
+    width: 380px;
+    height: 300px;
+}
+.cartStock{
+    // margin-left: 40px;
+    width: 445px;
+    height: 300px;
+}
+
+.StockLevel{
+     margin-left: 40px;
+    width: 260px;
+    height: 180px;
+}
+
+.Rec{
+    margin-left: 79px;
+   width: 245px;
+   height: 180px;
+}
+
+.Pay{
+    margin-left: 105px;
+   width: 245px;
+   height: 180px;
+}
+
+.BRV{
+    margin-left: 131px;
+   width: 245px;
+   height: 180px;
+}
+
+.CRV{
+    margin-left: 156px;
+   width: 245px;
+   height: 180px;
+}
+#Stock, #Purchase, #Sales {
+    display: block;
+    min-width: 330px;
+    max-width: 370px;
+    height: 280px;
+    // margin: 0 auto;
+  }
+
+  #Stock {
+    display: block;
+    min-width: 440px;
+    max-width: 400px;
+    height: 270px;
+    margin-left: -16px;
+    // margin: 0 auto;
+  }
+
+  #StockLevel {
+    display: block;
+    min-width: 200px;
+    max-width: 150ppx;
+    height: 160px;
+    margin-left: -16px;
+    // margin: 0 auto;
+  }
+  
+  #Receivable {
+    display: block;
+    min-width: 200px;
+    max-width: 180ppx;
+    height: 180px;
+    margin-left: -16px;
+    margin-top: -15px;
+    // margin: 0 auto;
+    
+  }
+  
+  
