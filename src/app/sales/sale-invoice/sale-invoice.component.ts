@@ -8,6 +8,8 @@ import { MatPaginator } from "@angular/material/paginator"
 import { SegSegmentManagementService } from 'src/app/Services/seg-segment-management.service';
 import { ToastrService } from 'ngx-toastr';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import { timeout } from 'rxjs-compat/operator/timeout';
+import { VoucherPeriodSelectionService } from 'src/app/Services/voucher-period-selection.service';
 
 
 
@@ -29,6 +31,7 @@ export class SaleInvoiceComponent implements OnInit {
   constructor(private router: Router,
     private saleServices:SalesService,
     private sm:SegSegmentManagementService,
+    private voucherService:VoucherPeriodSelectionService,
     private fb:FormBuilder,
     private toaster: ToastrService,
     public dialog: MatDialog,
@@ -40,9 +43,14 @@ export class SaleInvoiceComponent implements OnInit {
   CartColor: any;
   DataSource: any;
   LOVSource: any;
+  PeriodSource:any;
   SMS: any;
   WareHouseData:any;
   SalesManData:any;
+  InvoiceTypeData:any;
+  SelectedDate:any;
+  minDate = new Date();
+  maxDate = new Date();
   // Btn
   btnNew: boolean = true;
   btnEdit: boolean = true;
@@ -58,7 +66,7 @@ export class SaleInvoiceComponent implements OnInit {
   filedlock: boolean = true;
   DefaultSaleTaxPercentage:number = 17.0;
   PeriodID:number =202212;
-  InvoiceType:number=0;
+  
   //Pagination
   currentIndex = 0;
   page = 1;
@@ -114,6 +122,7 @@ export class SaleInvoiceComponent implements OnInit {
       InvoiceID: ['Invoice ID', [Validators.required]],
       InvoiceNo: ['Invoice No', [Validators.required]],
       InvoiceDate: ['Invoice Date', [Validators.required]],
+      InvoiceType:['0', [Validators.required]],
       WareHouse: ['Ware House'],
       Saleman: ['Saleman'],
       CustomerId: ['Customer ID', [Validators.required]],
@@ -162,26 +171,72 @@ export class SaleInvoiceComponent implements OnInit {
 
   
   ngOnInit(): void {
-    
+    this.GetVoucherType();
     this.getDataValues();
-    this.LoadMaster();
     this.BlankMaster();
    
   }
   ngAfterViewInit()
   {
-     this.openModalDistribution()
+     this.PeriodSelectionModal()
   }
-  openModalDistribution(): void {
+  PeriodSelectionModal(): void {
     
     this.dialog.open(this.openPeriodSelectionModal, {
       width: '280px',
       height: '300px',
       disableClose: true,
+     
     });
+    
 }
-Close():void
+Close():boolean
 {
+
+if(this.SelectedDate == undefined)
+{
+  this.toaster.error('Please Select Invoice Date','Period Selection', {timeOut: 2000})
+  return  false;
+}
+
+else if(this.SeleInvoiceForm.value.InvoiceType == null)
+ {
+  
+ this.toaster.error('Please Select Invoice Type','Period Selection', {timeOut: 2000})
+ return  false;
+ }
+ else{
+  this.SeleInvoiceForm.get('InvoiceDate')?.setValue(this.SelectedDate);
+  
+  const key={
+    FrontDate:this.SelectedDate,
+  }
+
+  this.voucherService.GetPeriod(key).subscribe(data=>
+  {
+    this.PeriodSource = data;
+  });
+
+    if(this.PeriodSource.length==0)
+    {
+      this.toaster.error('Period is not define or has been closed for entry','Period Selection', {timeOut: 2000})
+      return  false; 
+    }
+    else{
+      this.dialog.closeAll(); 
+    }
+  
+    
+ 
+    return  true; 
+}
+
+}
+
+
+Cancel():void
+{
+
   this.router.navigate(['home']);
   this.dialog.closeAll();
 }
@@ -219,6 +274,12 @@ Close():void
   BlankMaster()
   {
     let data:any;
+    this.SeleInvoiceForm.reset();
+    this.saleFormArray.clear();
+    this.masterData = [];
+    this.detailData = [];
+
+
     const key={
       InvoiceDate: '18-Jun-2022',
       InvoiceType:7
@@ -229,7 +290,35 @@ Close():void
         this.SeleInvoiceForm.get('InvoiceNo')?.setValue(data[0].InvoiceNo);
      
     });
-  };
+
+    
+    const Inv={
+      InvoiceId:1
+    }
+   
+    const row = this.fb.group({
+      'ItemCode': null,
+      'Description': null,
+      'Stock': 0,
+      'Qty': 0,
+      'Rate': 0,
+      'IssueRate': 0,
+      'RateEnt': 0,
+      'CostOfSales': 0,
+      'DiscountPercentage': 0,
+      'DiscountAmount': 0,
+      'Value': 0,
+      'NetValue':0,
+      });
+      this.SeleInvoiceForm.get('InvoiceDate')?.setValue(this.SelectedDate);
+
+      this.masterData.push(Inv);
+      this.saleFormArray.push(row);
+      this.GRDData.data = this.saleFormArray.controls;
+      this.CountTotal();
+  }
+
+  
   get saleFormArray(): FormArray {
     return this.SeleInvoiceForm.get('GRD') as FormArray;
   }
@@ -243,7 +332,7 @@ Close():void
       
     var compareItem = ((this.SeleInvoiceForm.get('GRD') as FormArray).at(Index) as FormGroup).get('ItemCode');
    
-     for (let i =0;i< this.saleFormArray.length-1;i++)
+     for (let i =0; i< this.saleFormArray.length-1;i++)
      {
       var ItemCode = ((this.SeleInvoiceForm.get('GRD') as FormArray).at(i) as FormGroup).get('ItemCode');
      
@@ -504,7 +593,26 @@ DiscountAmount(e:any) {
   }
 }
 
+SelectDate(event:any):void
+{
+ this.SelectedDate = new Date(event.value);
+}
+
+SelectInvoiceType(InvoiceTypeID:any):void{
+  this.SeleInvoiceForm.get('InvoiceType')?.setValue(InvoiceTypeID);
+  
+}
+
   //API Calling
+  GetVoucherType():void{
+  const InvoiceType ={
+    voucherType :"INV"
+  }
+  this.voucherService.GetVoucherType(InvoiceType).subscribe(data =>{
+    this.InvoiceTypeData=data;
+  })
+}
+  
 getDataValues():void{
   const warehouse ={
     ValueSetID:5
@@ -519,6 +627,10 @@ getDataValues():void{
   this.sm.LoadDataValues(saleman).subscribe(data =>{
     this.SalesManData=data;
   })
+
+ 
+
+
   }
 
   FindMaster() {
@@ -549,7 +661,7 @@ getDataValues():void{
 
     const obj={
       PeriodId:this.PeriodID,
-      InvoiceType:this.InvoiceType,
+      InvoiceType:this.SeleInvoiceForm.value.InvoiceType,
       AddorEdit:'ADD',
 
       InvoiceId:this.SeleInvoiceForm.value.InvoiceID,

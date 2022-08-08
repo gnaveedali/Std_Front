@@ -125,7 +125,7 @@
 
         <mat-form-field color="accent" appearance="outline" class="field-fill inputs" class="marginAndWidth">
           <mat-label>Invoice Date</mat-label>
-          <input matInput [matDatepicker]="picker" [disabled]="Locked" formControlName="InvoiceDate">
+          <input matInput [matDatepicker]="picker" [min]="minDate" [max]="maxDate" [disabled]="Locked" formControlName="InvoiceDate">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker color="primary"></mat-datepicker>
         </mat-form-field>
@@ -382,7 +382,7 @@
         <div class="col-md-6">
           <mat-form-field color="accent" style="height: 60px !Important;" appearance="outline" class="field-fill inputs" class="marginAndWidth">
             <mat-label>Invoice Date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="InvoiceDate" >
+            <input matInput [matDatepicker]="picker"  (dateChange)="SelectDate($event)">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker color="primary"></mat-datepicker>
           </mat-form-field>
@@ -393,8 +393,8 @@
         <div class="col-md-6">
           <mat-form-field appearance="outline"  class="field-fill inputs" class="marginAndWidth">
             <mat-label>Invoice Type</mat-label>
-            <mat-select formControlName="Saleman"  style="height: 25px !Important;">
-              <mat-option *ngFor="let data of SalesManData" [value]="data.dataValueId">
+            <mat-select   style="height: 25px !Important;">
+              <mat-option *ngFor="let data of InvoiceTypeData" [value]="data.dataValueId" (click)="SelectInvoiceType(data.dataValueId)">
                 {{data.dataValueName}}
               </mat-option>
             </mat-select>
@@ -404,11 +404,11 @@
     </div>
     <div class="row pt-2">
       <div class="col-md-6">
-        <button mat-raised-button color="warn" (click)="Close()">Cancel</button>
+        <button mat-raised-button color="warn" style="width: 100px;" (click)="Cancel()">Cancel</button>
       </div>
     
       <div class="col-md-2">
-      <button mat-raised-button color="primary">Ok</button>
+      <button mat-raised-button color="primary" style="width: 100px;" (click)="Close()">Ok</button>
     </div>
   </div>
     
@@ -416,19 +416,3 @@
   </ng-template>
 </section>
 
-
-<!-- <form [formGroup]="employeeForm">
-
-    <div class="form-group">
-        <input id="fullName" type="text" class="form-control" formControlName="fullName">
-        <div formArrayName="skills">
-           
-          <div formGroupName="0">
-             Skill Name Label & Form Control HTML
-              Experience Label & Form Control HTML
-              Proficiency Label & Form Control HTML 
-          </div>
-        </div>
-      </div>
-
-</form> -->
