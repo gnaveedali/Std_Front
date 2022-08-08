@@ -19,7 +19,7 @@ import { VoucherPeriodSelectionService } from 'src/app/Services/voucher-period-s
   styleUrls: ['./sale-invoice.component.scss']
 })
 
-
+//ftc
 export class SaleInvoiceComponent implements OnInit {
 
   @ViewChild('openPeriodSelectionModal') openPeriodSelectionModal!: TemplateRef<any>;
