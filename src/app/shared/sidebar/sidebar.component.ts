@@ -55,6 +55,8 @@ SaleInvoice()
 {
   this.router.navigate(['saleInvoice']);
 }
-  
+ItemDescription(){
+  this.router.navigate(['itemDescription']);
+}
 
 }

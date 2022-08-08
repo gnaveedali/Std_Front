@@ -25,6 +25,7 @@ import { SalesModule } from './sales/sales.module';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ToastrModule } from 'ngx-toastr';
+import { InventoryModule } from './inventory/inventory.module';
 
 
 
@@ -33,6 +34,7 @@ import { ToastrModule } from 'ngx-toastr';
   declarations: [
     AppComponent,
     UserLoginComponent,
+  
 
     //ToolbarComponent,
    
@@ -62,6 +64,7 @@ import { ToastrModule } from 'ngx-toastr';
       timeOut: 15000, // 15 seconds
       progressBar: true,
     }),
+    InventoryModule
   
   
     //  MatSelectModule ,
