@@ -24,8 +24,6 @@ export class SaleInvoiceComponent implements OnInit {
 
   @ViewChild('openPeriodSelectionModal') openPeriodSelectionModal!: TemplateRef<any>;
 
-  
-  
   GRDData = new MatTableDataSource();
  
   constructor(private router: Router,
