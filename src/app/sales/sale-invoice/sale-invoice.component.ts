@@ -20,13 +20,11 @@ import * as moment from 'moment';
   styleUrls: ['./sale-invoice.component.scss']
 })
 
-
+//ftc
 export class SaleInvoiceComponent implements OnInit {
 
   @ViewChild('openPeriodSelectionModal') openPeriodSelectionModal!: TemplateRef<any>;
 
-  
-  
   GRDData = new MatTableDataSource();
  
   constructor(private router: Router,

@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home/home.component';
+import { ItemDescriptionComponent } from './inventory/item-description/item-description.component';
 import { SaleInvoiceComponent } from './sales/sale-invoice/sale-invoice.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
-
 import { UserLoginComponent } from './user-login/user-login.component';
 
 const routes: Routes = [
@@ -28,6 +28,10 @@ const routes: Routes = [
     {
       path:'saleInvoice',
       component:SaleInvoiceComponent
+    },
+    {
+      path:'itemDescription',
+      component:ItemDescriptionComponent
     }
      
 ];
