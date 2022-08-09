@@ -661,7 +661,7 @@ getDataValues():void{
   SaveMaster() {
 
  let InvId = 0;
-  if(this.AddorEdit ==='ADD')
+  if(this.AddorEdit ==='ADD')//Naveed Comments
   {
     InvId=0
   }
