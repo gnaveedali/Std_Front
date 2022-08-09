@@ -23,4 +23,5 @@ export class DetailData {
     SalesTaxAmount!: number;
     Value!: number;
     Net_Value!: number;
+    Sales_Order_Item_ID!:number;
 }

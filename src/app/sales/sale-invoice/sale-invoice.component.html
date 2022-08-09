@@ -318,6 +318,14 @@
                   </td>
                 </ng-container>
 
+                <ng-container matColumnDef="SalesOrderItemID">
+                  <th mat-header-cell *matHeaderCellDef  class="numericFeild" [hidden]="true"> Sales Order Item ID </th>
+                  <td mat-cell *matCellDef="let row; let index = index" [hidden]="true" [formGroupName]="getActualIndex(index)">
+                    <input class="mat-form-fieldTh" class="mat-form-fieldTh" type="number" formControlName="SalesOrderItemID"
+                      placeholder="SalesOrderItemID" [readonly]="true" class="numericFeild">
+                  </td>
+                </ng-container>
+
                 <ng-container matColumnDef="Remove">
                   <th mat-header-cell *matHeaderCellDef class="numericFeild" Style="text-align: center;"> Remove </th>
                   <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="getActualIndex(index)" >
@@ -343,7 +351,7 @@
 
         <mat-form-field appearance="standard" class="field-fill inputs footer">
           <mat-label>Freight Amount</mat-label>
-          <input matInput placeholder="Freight Amount" [readonly]="true" formControlName="FreightAmount">
+          <input matInput placeholder="Freight Amount" [readonly]="Locked" formControlName="FreightAmount">
         </mat-form-field>
 
         <mat-form-field appearance="standard" hidden="true" class="field-fill inputs footer">
@@ -368,7 +376,7 @@
 
         <mat-form-field appearance="standard" class="field-fill inputs footer">
           <mat-label>Invoice Amount</mat-label>
-          <input matInput placeholder="Invoice Amount" [readonly]="Locked" formControlName="InvoiceAmount">
+          <input matInput placeholder="Invoice Amount" [readonly]="true" formControlName="InvoiceAmount">
         </mat-form-field>
       
         </div>

@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import { timeout } from 'rxjs-compat/operator/timeout';
 import { VoucherPeriodSelectionService } from 'src/app/Services/voucher-period-selection.service';
+import * as moment from 'moment';
 
 
 
@@ -49,8 +50,10 @@ export class SaleInvoiceComponent implements OnInit {
   SalesManData:any;
   InvoiceTypeData:any;
   SelectedDate:any;
-  minDate = new Date();
-  maxDate = new Date();
+  minDate:any;
+  maxDate :any;
+  InvoiceType:number =0;
+  AddorEdit:string='ADD';
   // Btn
   btnNew: boolean = true;
   btnEdit: boolean = true;
@@ -65,7 +68,7 @@ export class SaleInvoiceComponent implements OnInit {
   ReadOnly: boolean = false;
   filedlock: boolean = true;
   DefaultSaleTaxPercentage:number = 17.0;
-  PeriodID:number =202212;
+  PeriodID:number =0;
   
   //Pagination
   currentIndex = 0;
@@ -112,6 +115,7 @@ export class SaleInvoiceComponent implements OnInit {
     'DiscountAmount',
     'Value',
     'NetValue',
+    'SalesOrderItemID',
     'Remove'
   ];
 
@@ -164,7 +168,8 @@ export class SaleInvoiceComponent implements OnInit {
         DiscountPercentage: ['0.00'],
         DiscountAmount: ['0.00' ],
         Value: ['0.00', Validators.required],
-        NetValue: ['0.00', Validators.required]
+        NetValue: ['0.00', Validators.required],
+        SalesOrderItemID: ['0']
        
       });
     }
@@ -173,12 +178,13 @@ export class SaleInvoiceComponent implements OnInit {
   ngOnInit(): void {
     this.GetVoucherType();
     this.getDataValues();
-    this.BlankMaster();
+   
    
   }
   ngAfterViewInit()
   {
      this.PeriodSelectionModal()
+   
   }
   PeriodSelectionModal(): void {
     
@@ -215,19 +221,23 @@ else if(this.SeleInvoiceForm.value.InvoiceType == null)
   this.voucherService.GetPeriod(key).subscribe(data=>
   {
     this.PeriodSource = data;
-  });
-
-    if(this.PeriodSource.length==0)
+  
+ 
+    if(this.PeriodSource.length == 0)
     {
       this.toaster.error('Period is not define or has been closed for entry','Period Selection', {timeOut: 2000})
-      return  false; 
+     
     }
     else{
+     
+      this.minDate = this.PeriodSource.periodStDate; 
+      this.maxDate= this.PeriodSource.periodEnDate; 
+      this.PeriodID = this.PeriodSource.sPeriod;
       this.dialog.closeAll(); 
+      this.BlankMaster();
     }
-  
-    
- 
+  });
+
     return  true; 
 }
 
@@ -279,10 +289,10 @@ Cancel():void
     this.masterData = [];
     this.detailData = [];
 
-
+    console.log(this.SeleInvoiceForm.value)
     const key={
-      InvoiceDate: '18-Jun-2022',
-      InvoiceType:7
+      InvoiceDate: this.SelectedDate,
+      InvoiceType: this.InvoiceType,
     }
     this.saleServices.GetInvoiceNo(key).subscribe(res=> 
     {
@@ -299,7 +309,7 @@ Cancel():void
     const row = this.fb.group({
       'ItemCode': null,
       'Description': null,
-      'Stock': 0,
+      'Stock': 10,
       'Qty': 0,
       'Rate': 0,
       'IssueRate': 0,
@@ -309,6 +319,7 @@ Cancel():void
       'DiscountAmount': 0,
       'Value': 0,
       'NetValue':0,
+      'SalesOrderItemID':0,
       });
       this.SeleInvoiceForm.get('InvoiceDate')?.setValue(this.SelectedDate);
 
@@ -316,6 +327,7 @@ Cancel():void
       this.saleFormArray.push(row);
       this.GRDData.data = this.saleFormArray.controls;
       this.CountTotal();
+      this.ButtonNew();
   }
 
   
@@ -351,8 +363,8 @@ Cancel():void
         const row = this.fb.group({
         'ItemCode': null,
         'Description': null,
-        'Stock': 1,
-        'Qty': 1,
+        'Stock': 10,
+        'Qty': 0,
         'Rate': 0,
         'IssueRate': 0,
         'RateEnt': 0,
@@ -360,6 +372,8 @@ Cancel():void
         'DiscountPercentage': 0,
         'DiscountAmount': 0,
         'Value': 0,
+        'NetValue':0,
+        'SalesOrderItemID':0
        
         });
         this.saleFormArray.push(row);
@@ -418,6 +432,7 @@ Cancel():void
         'DiscountAmount': this.detailData[i].DiscountAmount,
         'Value': this.detailData[i].Value,
         'NetValue': this.detailData[i].Net_Value,
+        'SalesOrderItemID':0,
        });
       this.saleFormArray.push(row);
     }
@@ -426,8 +441,8 @@ Cancel():void
     const row = this.fb.group({
       'ItemCode': null,
       'Description': null,
-      'Stock': 1,
-      'Qty': 1,
+      'Stock': 0,
+      'Qty': 0,
       'Rate': 0,
       'IssueRate': 0,
       'RateEnt': 0,
@@ -436,6 +451,7 @@ Cancel():void
       'DiscountAmount': 0,
       'Value': 0,
       'NetValue':0,
+      'SalesOrderItemID':0,
       });
       this.saleFormArray.push(row);
       this.GRDData.data = this.saleFormArray.controls;
@@ -540,7 +556,14 @@ Stock(e:any)
 }
 Qty(e:any)
 {
-  this.Validation(e)
+  if(this.Validation(e) == true)
+  {
+    var Qty = ((this.SeleInvoiceForm.get('GRD') as FormArray).at(e) as FormGroup).get('Qty');
+    var Issue_Rate = ((this.SeleInvoiceForm.get('GRD') as FormArray).at(e) as FormGroup).get('IssueRate');
+    var Cost_Of_Sales = parseFloat(Qty?.value)* parseFloat(Issue_Rate?.value);
+    ((this.SeleInvoiceForm.get('GRD') as FormArray).at(e) as FormGroup).get('CostOfSales')?.patchValue(Cost_Of_Sales);
+  
+  }
 }
 
 Rate(e:any) {
@@ -598,9 +621,8 @@ SelectDate(event:any):void
  this.SelectedDate = new Date(event.value);
 }
 
-SelectInvoiceType(InvoiceTypeID:any):void{
-  this.SeleInvoiceForm.get('InvoiceType')?.setValue(InvoiceTypeID);
-  
+SelectInvoiceType(InvoiceTypeID:number):void{
+  this.InvoiceType = InvoiceTypeID;
 }
 
   //API Calling
@@ -628,9 +650,6 @@ getDataValues():void{
     this.SalesManData=data;
   })
 
- 
-
-
   }
 
   FindMaster() {
@@ -640,38 +659,52 @@ getDataValues():void{
     this.ButtonEdit();
   }
   SaveMaster() {
+
+ let InvId = 0;
+  if(this.AddorEdit ==='ADD')
+  {
+    InvId=0
+  }
+  
+  else
+  {
+    InvId= this.SeleInvoiceForm.value.InvoiceID;
+    this.AddorEdit ='EDIT'
+  }
     
     let InvoiceDetail=[];
     for(let i=0;i<this.SeleInvoiceForm.value.GRD.length;i++)
     {
       const key={
-        InvoiceID:1,
+        InvoiceID:InvId,
         ItemCode:this.SeleInvoiceForm.value.GRD[i].ItemCode,
         RateEnt:this.SeleInvoiceForm.value.GRD[i].Rate,
         Rate:this.SeleInvoiceForm.value.GRD[i].Rate,
+        IssueRate:this.SeleInvoiceForm.value.GRD[i].IssueRate,
         Qty:this.SeleInvoiceForm.value.GRD[i].Qty,
+        Cost_Of_Sales:this.SeleInvoiceForm.value.GRD[i].Cost_Of_Sales,
         DiscountPercentage:this.SeleInvoiceForm.value.GRD[i].DiscountPercentage,
         DiscountAmount:this.SeleInvoiceForm.value.GRD[i].DiscountAmount,
         Value:this.SeleInvoiceForm.value.GRD[i].Value,
         Net_Value:this.SeleInvoiceForm.value.GRD[i].NetValue,
-        Sales_Order_Item_ID:0,
+        Sales_Order_Item_ID:this.SeleInvoiceForm.value.GRD[i].SalesOrderItemID,
       }
       InvoiceDetail.push(key)
     }
 
     const obj={
       PeriodId:this.PeriodID,
-      InvoiceType:this.SeleInvoiceForm.value.InvoiceType,
-      AddorEdit:'ADD',
+      InvoiceType:this.InvoiceType,
+      AddorEdit:this.AddorEdit,
 
-      InvoiceId:this.SeleInvoiceForm.value.InvoiceID,
+      InvoiceId:InvId,
       InvoiceNo:this.SeleInvoiceForm.value.InvoiceNo,
       InvoiceDate:this.SeleInvoiceForm.value.InvoiceDate,
       WareHouse:this.SeleInvoiceForm.value.WareHouse,
       Saleman:this.SeleInvoiceForm.value.Saleman,
       CustomerId:this.SeleInvoiceForm.value.CustomerId,
       CustomerName:this.SeleInvoiceForm.value.CustomerName,
-      CustomerCell:this.SeleInvoiceForm.value.ContactNo?null:'NULL',
+      CustomerCell:this.SeleInvoiceForm.value.ContactNo,
       RefrenceNo:this.SeleInvoiceForm.value.RefrenceNo,
       Remarks:this.SeleInvoiceForm.value.Remarks,
       Freight_Amount:this.SeleInvoiceForm.value.FreightAmount?null:0,
@@ -679,7 +712,7 @@ getDataValues():void{
       SalesTaxAmount:this.SeleInvoiceForm.value.SalesTaxAmount?null:0,
       DiscountPercentage:this.SeleInvoiceForm.value.DiscountPercentage?null:0,
       DiscountAmount:this.SeleInvoiceForm.value.DiscountAmount?null:0,
-      InvoiceAmount:this.SeleInvoiceForm.value.InvoiceAmount?null:0,
+      InvoiceAmount:this.SeleInvoiceForm.value.InvoiceAmount,
       InvoiceItems:InvoiceDetail,
 
     }
